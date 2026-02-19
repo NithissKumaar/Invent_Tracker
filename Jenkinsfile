@@ -1,37 +1,31 @@
-
 pipeline {
-    /* 'agent any' tells Jenkins to run this on your 
-       configured Windows build node.
-    */
     agent any
 
-    // Task 2: Define a string parameter named MESSAGE
     parameters {
-        string(name: 'MESSAGE', defaultValue: 'Hello from the Pipeline', description: 'Enter a custom message to display')
+        string(name: 'MESSAGE', defaultValue: 'Version 2 active', description: 'Verification message')
     }
 
     stages {
-        stage('Task 1: Checkout Source') {
+        stage('Task 1: Checkout Updated Code') {
             steps {
-                /* Task 1: This command tells Jenkins to look at the 
-                   GitHub repo configured in the job settings and pull the code.
-                */
+                // This pulls the changes you just pushed from your IDE
                 checkout scm
-                echo "Source code has been successfully synchronized from GitHub."
+                echo "Successfully pulled the latest commit from GitHub."
             }
         }
 
-        stage('Task 2: Handle Parameter') {
+        stage('Task 2: System Date') {
             steps {
-                // Task 2: Print the parameter value in the console output
-                echo "The parameter MESSAGE value is: ${params.MESSAGE}"
+                // Task 2: Execute Windows BAT command to show system date
+                echo "Fetching current system date..."
+                bat "date /t"
             }
         }
 
-        stage('Task 3: Execute BAT Command') {
+        stage('Task 3: Verify Parameter') {
             steps {
-                // Task 3: Execute a simple Windows batch command (BAT)
-                bat "echo Hello from Jenkins"
+                // Task 3: Print the parameter again to ensure it persists
+                echo "The parameter value is still: ${params.MESSAGE}"
             }
         }
     }
