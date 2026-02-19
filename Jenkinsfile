@@ -1,7 +1,7 @@
 pipeline {
     agent any
-    environment {
-        MY_STEP_VAR = "Experiment-6-Task-2"
+    parameters {
+        string(name: 'VERSION', defaultValue: '1.0.0', description: 'Enter Build Version')
     }
     stages {
         stage('Checkout') {
@@ -9,10 +9,11 @@ pipeline {
                 checkout scm
             }
         }
-        stage('Print Custom Env') {
+        stage('Create Version File') {
             steps {
-                // In Windows BAT, variables are wrapped in % signs
-                bat "echo The custom variable is: %MY_STEP_VAR%"
+                // writeFile works natively on Windows without needing 'bat'
+                writeFile file: 'version.txt', text: "Version Value: ${params.VERSION}"
+                echo "Successfully created version.txt with value: ${params.VERSION}"
             }
         }
     }
