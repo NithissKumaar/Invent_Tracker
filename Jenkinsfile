@@ -8,12 +8,14 @@ pipeline {
         }
         stage('Print Env Variables') {
             steps {
-                sh 'printenv' // Use 'bat set' if on Windows
+                // 'set' is the Windows equivalent of 'printenv'
+                bat 'set'
             }
         }
         stage('Custom Message') {
             steps {
-                echo "Running Job: ${env.JOB_NAME} - Build # ${env.BUILD_ID}"
+                echo "Running Job: ${env.JOB_NAME}"
+                echo "Build Number: ${env.BUILD_ID}"
             }
         }
     }
