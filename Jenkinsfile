@@ -1,20 +1,22 @@
 pipeline {
     agent any
-    parameters {
-        string(name: 'VERSION', defaultValue: '1.0.0', description: 'Enter Build Version')
-    }
     stages {
         stage('Checkout') {
             steps {
                 checkout scm
             }
         }
-        stage('Create Version File') {
+        stage('Print Git Info') {
             steps {
-                // writeFile works natively on Windows without needing 'bat'
-                writeFile file: 'version.txt', text: "Version Value: ${params.VERSION}"
-                echo "Successfully created version.txt with value: ${params.VERSION}"
+                // GIT_COMMIT is automatically available after the checkout stage
+                echo "Current Git Commit ID: ${env.GIT_COMMIT}"
             }
+        }
+    }
+    post {
+        always {
+            // currentBuild.currentResult tracks if the job was SUCCESS or FAILURE
+            echo "Final Build Result: ${currentBuild.currentResult}"
         }
     }
 }
